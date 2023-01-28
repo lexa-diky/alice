@@ -1,0 +1,23 @@
+plugins {
+    id 'kotlin'
+    id 'maven-publish'
+}
+
+group = 'com.github.akore-org'
+version = '1.0'
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+    implementation "io.insert-koin:koin-core:3.3.0"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId "com.github.akore-org.alice"
+            artifactId "robo"
+            version "1.0"
+            from components.java
+        }
+    }
+}
