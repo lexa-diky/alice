@@ -34,7 +34,7 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
     buildFeatures {
         compose true
@@ -54,10 +54,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
     implementation "io.insert-koin:koin-core:3.3.0"
     implementation "io.insert-koin:koin-androidx-compose:3.3.0"
-
-    ///////////////////////////////////
-    //////////////////////////////////
-    /////////////////////////////////
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
 
