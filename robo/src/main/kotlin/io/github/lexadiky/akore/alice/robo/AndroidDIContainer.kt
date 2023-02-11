@@ -21,7 +21,7 @@ inline fun <reified T : ViewModel> DIContainer.viewModel(key: String, vararg par
     return androidx.lifecycle.viewmodel.compose.viewModel(
         key = key,
         initializer = {
-            val internalViewModelFactory = lookup<DIViewModelFactory<T>>(parameters)
+            val internalViewModelFactory = lookup<DIViewModelFactory<T>>(*parameters)
             internalViewModelFactory.create()
         }
     )
