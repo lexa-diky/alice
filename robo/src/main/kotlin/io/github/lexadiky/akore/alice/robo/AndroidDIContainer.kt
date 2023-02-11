@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import io.github.lexadiky.akore.alice.DIContainer
 import io.github.lexadiky.akore.alice.DIModule
+import kotlin.reflect.KClass
 
 @Composable
 inline fun <reified T : Any> DIContainer.inject(): T = remember { lookup() }
@@ -18,8 +19,10 @@ inline fun <reified T : Any> DIContainer.inject(vararg parameters: Any): T = rem
 
 @Composable
 inline fun <reified T : ViewModel> DIContainer.viewModel(key: String, vararg parameters: Any): T {
+    val actualKey = "${T::class.qualifiedName}:$key"
+
     return androidx.lifecycle.viewmodel.compose.viewModel(
-        key = key,
+        key = actualKey,
         initializer = {
             val internalViewModelFactory = lookup<DIViewModelFactory<T>>(*parameters)
             internalViewModelFactory.create()

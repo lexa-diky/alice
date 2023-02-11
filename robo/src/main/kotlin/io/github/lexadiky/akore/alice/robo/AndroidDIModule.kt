@@ -14,8 +14,8 @@ inline fun <reified T: ViewModel> ModuleBuilder.singleViewModel(crossinline prov
     integrityChecker.check(cls = T::class, allowInternal = inInternalScope)
 
     module.single(definition = { params ->
-        val diParametersHolder = ModuleBuilder.DIParametersHolder(params)
         DIViewModelFactory {
+            val diParametersHolder = ModuleBuilder.DIParametersHolder(params)
             ModuleBuilder.DIScope(this).provider(diParametersHolder)
         }
     })
