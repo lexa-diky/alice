@@ -18,7 +18,7 @@ inline fun <reified T : Any> DIContainer.inject(vararg parameters: Any): T = rem
 }
 
 @Composable
-inline fun <reified T : ViewModel> DIContainer.viewModel(key: String? = "default", vararg parameters: Any): T {
+inline fun <reified T : ViewModel> DIContainer.viewModel(key: String = "default", vararg parameters: Any): T {
     val actualKey = "${T::class.qualifiedName}:$key"
 
     return androidx.lifecycle.viewmodel.compose.viewModel(
