@@ -17,19 +17,6 @@ inline fun <reified T : Any> DIContainer.inject(vararg parameters: Any): T = rem
     lookup(*parameters)
 }
 
-@Composable
-inline fun <reified T : ViewModel> DIContainer.viewModel(key: String = "default", vararg parameters: Any): T {
-    val actualKey = "${T::class.qualifiedName}:$key"
-    val internalViewModelFactory = lookup<DIViewModelFactory<T>>(*parameters)
-
-    return androidx.lifecycle.viewmodel.compose.viewModel(
-        key = actualKey,
-        initializer = {
-            internalViewModelFactory.create()
-        }
-    )
-}
-
 private val LocalDIContainer = compositionLocalOf<DIContainer> {
     error("no di container attached")
 }
