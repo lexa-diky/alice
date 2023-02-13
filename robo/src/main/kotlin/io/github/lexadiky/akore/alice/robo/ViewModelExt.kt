@@ -29,13 +29,12 @@ inline fun <reified T : ViewModel> DIContainer.viewModel(
     val actualKey = makeActualKeyFor(T::class, genKey)
 
     val internalViewModelFactory = lookup<DIViewModelFactory<T>>(
-        qualifier = actualKey,
+        qualifier = T::class.qualifiedName!!,
     )
 
     val params = remember(T::class.qualifiedName, *parameters) {
         ModuleBuilder.DIParametersHolder(parametersOf(*parameters))
     }
-
 
     return androidx.lifecycle.viewmodel.compose.viewModel(
         key = actualKey,
