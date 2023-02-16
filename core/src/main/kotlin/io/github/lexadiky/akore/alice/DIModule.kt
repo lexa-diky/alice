@@ -62,7 +62,7 @@ class ModuleBuilder(private val module: Module) {
             vararg parameters: Any,
         ) = scope.get<T>(
             qualifier = named(qualifier.tag),
-            parameters = { parametersOf(parameters) }
+            parameters = { parametersOf(*parameters) }
         )
     }
 
