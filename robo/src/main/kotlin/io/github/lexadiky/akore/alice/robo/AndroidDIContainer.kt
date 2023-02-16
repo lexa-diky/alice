@@ -4,10 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import androidx.lifecycle.ViewModel
 import io.github.lexadiky.akore.alice.DIContainer
 import io.github.lexadiky.akore.alice.DIModule
-import kotlin.reflect.KClass
+import io.github.lexadiky.akore.alice.lookup
 
 @Composable
 inline fun <reified T : Any> DIContainer.inject(): T = remember { lookup() }
@@ -31,7 +30,7 @@ fun DIApplication(container: DIContainer, content: @Composable () -> Unit) {
 @Composable
 fun DIFeature(vararg includes: DIModule, content: @Composable () -> Unit) {
     val diContainer = LocalDIContainer.current
-    diContainer.registerFeature(includes)
+    diContainer.register(includes)
     content()
 }
 

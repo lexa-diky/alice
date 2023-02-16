@@ -5,20 +5,24 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import io.github.lexadiky.akore.alice.DIContainer
 import io.github.lexadiky.akore.alice.ModuleBuilder
+import io.github.lexadiky.akore.alice.Qualifier
 import kotlin.reflect.KClass
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 
 inline fun <reified T : ViewModel> ModuleBuilder.singleViewModel(
-    crossinline provider: ModuleBuilder.DIScope.(ModuleBuilder.DIParametersHolder) -> T
+    crossinline provider: ModuleBuilder.DIScope.(ModuleBuilder.DIParametersHolder) -> T,
 ) {
-    integrityChecker.check(cls = T::class, allowInternal = inInternalScope)
-
-    module.single(qualifier = named(T::class.qualifiedName!!), definition = {
-        DIViewModelFactory { parameters ->
-            ModuleBuilder.DIScope(this).provider(parameters)
+    single(
+        qualifier = Qualifier(T::class.qualifiedName!!),
+        type = DIViewModelFactory::class,
+        provider = {
+            val scope = this
+            DIViewModelFactory { parameters ->
+                scope.provider(parameters)
+            }
         }
-    })
+    )
 }
 
 @Composable
@@ -28,8 +32,9 @@ inline fun <reified T : ViewModel> DIContainer.viewModel(
     val genKey = parameters.contentToString()
     val actualKey = makeActualKeyFor(T::class, genKey)
 
-    val internalViewModelFactory = lookup<DIViewModelFactory<T>>(
-        qualifier = T::class.qualifiedName!!,
+    val internalViewModelFactory = lookup(
+        qualifier = Qualifier(T::class.qualifiedName!!),
+        type = DIViewModelFactory::class
     )
 
     val params = remember(T::class.qualifiedName, *parameters) {
@@ -39,7 +44,7 @@ inline fun <reified T : ViewModel> DIContainer.viewModel(
     return androidx.lifecycle.viewmodel.compose.viewModel(
         key = actualKey,
         initializer = { internalViewModelFactory.create(params) }
-    )
+    ) as T
 }
 
 @PublishedApi

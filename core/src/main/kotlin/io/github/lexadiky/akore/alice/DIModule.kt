@@ -1,18 +1,22 @@
 package io.github.lexadiky.akore.alice
 
+import kotlin.reflect.KClass
+import org.koin.core.annotation.KoinInternalApi
+import org.koin.core.definition.BeanDefinition
+import org.koin.core.definition.Definition
+import org.koin.core.definition.Kind
+import org.koin.core.instance.SingleInstanceFactory
 import org.koin.core.module.Module
 import org.koin.core.parameter.ParametersHolder
+import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
 class DIModule(val name: String, internal val koinModule: Module)
 
-class ModuleBuilder(val module: Module) {
-
-    val integrityChecker = ModuleIntegrityChecker(
-        isEnabled = true
-    )
-
+@OptIn(KoinInternalApi::class)
+class ModuleBuilder(private val module: Module) {
     var inInternalScope: Boolean = false
 
     fun import(other: DIModule) {
@@ -22,13 +26,24 @@ class ModuleBuilder(val module: Module) {
         module.includes(other.koinModule)
     }
 
-    inline fun <reified T: Any> single(crossinline provider: DIScope.(DIParametersHolder) -> T) {
-        integrityChecker.check(cls = T::class, allowInternal = inInternalScope)
-
-        module.single(definition = { params ->
-            val diParametersHolder = DIParametersHolder(params)
-            DIScope(this).provider(diParametersHolder)
-        })
+    fun <T : Any> single(
+        type: KClass<T>,
+        qualifier: Qualifier = Qualifier.DEFAULT,
+        provider: DIScope.(DIParametersHolder) -> T,
+    ) {
+        val bean = BeanDefinition(
+            scopeQualifier = named("_root_"),
+            primaryType = type,
+            qualifier = named(qualifier.tag),
+            definition = { params ->
+                val diParametersHolder = DIParametersHolder(params)
+                DIScope(this).provider(diParametersHolder)
+            },
+            kind = Kind.Singleton,
+            secondaryTypes = emptyList()
+        )
+        val factory = SingleInstanceFactory(bean)
+        module.indexPrimaryType(factory)
     }
 
     inline fun internal(scope: ModuleBuilder.() -> Unit) {
@@ -37,10 +52,18 @@ class ModuleBuilder(val module: Module) {
         inInternalScope = false
     }
 
+    fun build(name: String): DIModule = DIModule(name, module)
+
     @JvmInline
     value class DIScope(@PublishedApi internal val scope: Scope) {
 
-        inline fun <reified T : Any> inject() = scope.get<T>()
+        inline fun <reified T : Any> inject(
+            qualifier: Qualifier = Qualifier.DEFAULT,
+            vararg parameters: Any,
+        ) = scope.get<T>(
+            qualifier = named(qualifier.tag),
+            parameters = { parametersOf(parameters) }
+        )
     }
 
     @JvmInline
@@ -50,11 +73,9 @@ class ModuleBuilder(val module: Module) {
     }
 }
 
-fun module(name: String, definition: ModuleBuilder.() -> Unit): Lazy<DIModule> {
-    return lazy {
-        DIModule(name, ModuleBuilder(module { }).apply(definition).module)
-    }
+fun module(name: String, definition: ModuleBuilder.() -> Unit): Lazy<DIModule> = lazy {
+    ModuleBuilder(module { }).apply(definition).build(name)
 }
 
 fun eagerModule(name: String, definition: ModuleBuilder.() -> Unit): DIModule =
-    DIModule(name, ModuleBuilder(module { }).apply(definition).module)
+    ModuleBuilder(module { }).apply(definition).build(name)
