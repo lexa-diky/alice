@@ -9,9 +9,9 @@ interface DIContainerEventListener {
 
     fun onModuleRegistered(module: DIModule) = Unit
 
+    fun onModuleDeregistered(module: DIModule) = Unit
+
     fun onLookup(type: KClass<*>, qualifier: Qualifier, vararg parameters: Any) = Unit
 
-    fun onContainerBuild(container: DIContainer) {
-
-    }
+    fun onContainerBuild(container: DIContainer) = Unit
 }

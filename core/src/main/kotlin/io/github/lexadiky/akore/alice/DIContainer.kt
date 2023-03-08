@@ -13,13 +13,20 @@ class DIContainer internal constructor(
 ) {
     private var registeredModules: HashMap<String, DIModule> = HashMap()
 
-    fun register(modules: Array<out DIModule>) {
-        val newModules = modules.filter { module -> module.name !in registeredModules }
-        newModules.forEach { module ->
-            registeredModules[module.name] = module
-            eventListener.onModuleRegistered(module)
+    fun register(module: DIModule) {
+        if (module.name in registeredModules) {
+            return
         }
-        application.modules(newModules.map { it.koinModule })
+
+        registeredModules[module.name] = module
+        application.modules(module.koinModule)
+        eventListener.onModuleRegistered(module)
+    }
+
+    fun deregister(module: DIModule) {
+        registeredModules.remove(module.name)
+        application.koin.unloadModules(listOf(module.koinModule))
+        eventListener.onModuleDeregistered(module)
     }
 
     fun <T : Any> lookup(type: KClass<T>, qualifier: Qualifier, vararg parameters: Any): T {

@@ -2,6 +2,7 @@ package io.github.lexadiky.akore.alice
 
 import io.github.lexadiky.akore.alice.introspection.DIContainerEventListener
 import io.github.lexadiky.akore.alice.introspection.DIContainerEventListenerGroup
+import io.github.lexadiky.akore.alice.util.register
 
 fun DIContainer.Companion.builder(): DIContainerBuilder = DIContainerBuilder()
 

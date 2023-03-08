@@ -17,6 +17,10 @@ class DIContainerEventListenerGroup internal constructor() : DIContainerEventLis
         subInspectors.forEach { it.onModuleRegistered(module) }
     }
 
+    override fun onModuleDeregistered(module: DIModule) {
+        subInspectors.forEach { it.onModuleDeregistered(module) }
+    }
+
     override fun onLookup(type: KClass<*>, qualifier: Qualifier, vararg parameters: Any) {
         subInspectors.forEach { it.onLookup(type, qualifier, parameters = parameters) }
     }

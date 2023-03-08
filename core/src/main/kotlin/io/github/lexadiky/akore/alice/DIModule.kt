@@ -17,7 +17,8 @@ class DIModule(val name: String, internal val koinModule: Module)
 
 @OptIn(KoinInternalApi::class)
 class ModuleBuilder(private val module: Module) {
-    var inInternalScope: Boolean = false
+    @PublishedApi
+    internal var inInternalScope: Boolean = false
 
     fun import(other: DIModule) {
         if (inInternalScope) {
