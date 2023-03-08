@@ -1,6 +1,6 @@
 package io.github.lexadiky.akore.alice
 
-import io.github.lexadiky.akore.alice.introspection.DIContainerInspector
+import io.github.lexadiky.akore.alice.introspection.DIContainerEventListener
 import kotlin.reflect.KClass
 import org.koin.core.KoinApplication
 import org.koin.core.parameter.parametersOf
@@ -9,7 +9,7 @@ import org.koin.dsl.koinApplication
 
 class DIContainer internal constructor(
     private val application: KoinApplication = koinApplication { },
-    private val inspector: DIContainerInspector
+    private val eventListener: DIContainerEventListener
 ) {
     private var registeredModules: HashMap<String, DIModule> = HashMap()
 
@@ -17,13 +17,13 @@ class DIContainer internal constructor(
         val newModules = modules.filter { module -> module.name !in registeredModules }
         newModules.forEach { module ->
             registeredModules[module.name] = module
-            inspector.onModuleRegistered(module)
+            eventListener.onModuleRegistered(module)
         }
         application.modules(newModules.map { it.koinModule })
     }
 
     fun <T : Any> lookup(type: KClass<T>, qualifier: Qualifier, vararg parameters: Any): T {
-        inspector.onLookup(
+        eventListener.onLookup(
             type = type,
             qualifier = qualifier,
             parameters = parameters

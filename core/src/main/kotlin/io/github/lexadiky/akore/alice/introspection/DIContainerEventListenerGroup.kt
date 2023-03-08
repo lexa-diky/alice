@@ -1,14 +1,15 @@
 package io.github.lexadiky.akore.alice.introspection
 
+import io.github.lexadiky.akore.alice.DIContainer
 import io.github.lexadiky.akore.alice.DIModule
 import io.github.lexadiky.akore.alice.Qualifier
 import kotlin.reflect.KClass
 
-class DIContainerInspectorGroup internal constructor() : DIContainerInspector {
+class DIContainerEventListenerGroup internal constructor() : DIContainerEventListener {
 
-    private val subInspectors: MutableList<DIContainerInspector> = ArrayList()
+    private val subInspectors: MutableList<DIContainerEventListener> = ArrayList()
 
-    fun register(subInspector: DIContainerInspector) {
+    fun register(subInspector: DIContainerEventListener) {
         subInspectors += subInspector
     }
 
@@ -18,5 +19,9 @@ class DIContainerInspectorGroup internal constructor() : DIContainerInspector {
 
     override fun onLookup(type: KClass<*>, qualifier: Qualifier, vararg parameters: Any) {
         subInspectors.forEach { it.onLookup(type, qualifier, parameters = parameters) }
+    }
+
+    override fun onContainerBuild(container: DIContainer) {
+        subInspectors.forEach { it.onContainerBuild(container) }
     }
 }
