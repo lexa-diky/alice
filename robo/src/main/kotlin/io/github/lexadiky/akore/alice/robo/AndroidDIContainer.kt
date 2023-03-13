@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import io.github.lexadiky.akore.alice.DIContainer
 import io.github.lexadiky.akore.alice.DIModule
 import io.github.lexadiky.akore.alice.lookup
+import io.github.lexadiky.akore.alice.util.register
 
 @Composable
 inline fun <reified T : Any> DIContainer.inject(): T = remember { lookup() }

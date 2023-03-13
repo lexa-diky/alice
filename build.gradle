@@ -1,11 +1,5 @@
-buildscript {
-    dependencies {
-        classpath("com.github.akore-org.infra-red:kotlin-library:-SNAPSHOT")
-        classpath("com.github.akore-org.infra-red:android-library:-SNAPSHOT")
-    }
-}
-
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'io.github.akore.infrared.kotlin.lib' version '-SNAPSHOT' apply false
-    id 'io.github.akore.infrared.android.lib' version '-SNAPSHOT' apply false
+    id 'org.jetbrains.kotlin.android' version '1.7.20' apply false
+    id 'com.android.library' version '8.0.0-beta01' apply false
 }

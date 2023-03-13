@@ -1,20 +1,8 @@
 pluginManagement {
-    resolutionStrategy {
-        eachPlugin {
-            if ("${requested.id}" == "io.github.akore.infrared.kotlin.lib") {
-                useModule("com.github.akore-org.infra-red:kotlin-library:-SNAPSHOT")
-            }
-            if ("${requested.id}" == "io.github.akore.infrared.android.lib") {
-                useModule("com.github.akore-org.infra-red:android-library:-SNAPSHOT")
-            }
-        }
-    }
-
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven { url = "https://jitpack.io" }
     }
 }
 dependencyResolutionManagement {
