@@ -11,7 +11,7 @@ class DIContainer internal constructor(
     private val application: KoinApplication = koinApplication { },
     private val eventListener: DIContainerEventListener
 ) {
-    private var registeredModules: HashMap<String, DIModule> = HashMap()
+    internal var registeredModules: HashMap<String, DIModule> = HashMap()
 
     fun register(module: DIModule) {
         if (module.name in registeredModules) {

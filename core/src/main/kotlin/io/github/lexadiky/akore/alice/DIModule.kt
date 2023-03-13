@@ -13,17 +13,25 @@ import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
-class DIModule(val name: String, internal val koinModule: Module)
+class DIModule(
+    val name: String,
+    internal val koinModule: Module,
+    internal val importedModules: List<DIModule>
+)
 
 @OptIn(KoinInternalApi::class)
 class ModuleBuilder(private val module: Module) {
     @PublishedApi
     internal var inInternalScope: Boolean = false
 
+    @PublishedApi
+    internal var importedModules: ArrayList<DIModule> = ArrayList()
+
     fun import(other: DIModule) {
         if (inInternalScope) {
             throw IllegalStateException("imports in internal scope are not supported")
         }
+        importedModules += other
         module.includes(other.koinModule)
     }
 
@@ -53,7 +61,7 @@ class ModuleBuilder(private val module: Module) {
         inInternalScope = false
     }
 
-    fun build(name: String): DIModule = DIModule(name, module)
+    fun build(name: String): DIModule = DIModule(name, module, importedModules)
 
     @JvmInline
     value class DIScope(@PublishedApi internal val scope: Scope) {
