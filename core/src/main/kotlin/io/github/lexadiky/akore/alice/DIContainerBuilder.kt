@@ -27,7 +27,7 @@ class DIContainerBuilder internal constructor() {
         assertIsBuildable()
         wasBuiltOnce = true
 
-        return DIContainer(eventListener = groupEventInspector).apply {
+        return DIContainerImpl(eventListener = groupEventInspector).apply {
             register(modules = initialModules.toTypedArray())
             groupEventInspector.onContainerBuild(this)
         }

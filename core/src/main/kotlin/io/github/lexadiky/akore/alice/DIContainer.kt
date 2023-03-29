@@ -7,13 +7,25 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 
-class DIContainer internal constructor(
-    private val application: KoinApplication = koinApplication { },
+interface DIContainer {
+
+    fun register(module: DIModule)
+
+    fun deregister(module: DIModule)
+
+    fun <T : Any> lookup(type: KClass<T>, qualifier: Qualifier, vararg parameters: Any): T
+
+    companion object
+}
+
+internal class DIContainerImpl internal constructor(
+    private val application: KoinApplication = koinApplication { allowOverride(false) },
     private val eventListener: DIContainerEventListener
-) {
+) : DIContainer {
+
     internal var registeredModules: HashMap<String, DIModule> = HashMap()
 
-    fun register(module: DIModule) {
+    override fun register(module: DIModule) {
         if (module.name in registeredModules) {
             return
         }
@@ -23,13 +35,13 @@ class DIContainer internal constructor(
         eventListener.onModuleRegistered(module)
     }
 
-    fun deregister(module: DIModule) {
+    override fun deregister(module: DIModule) {
         registeredModules.remove(module.name)
         application.koin.unloadModules(listOf(module.koinModule))
         eventListener.onModuleDeregistered(module)
     }
 
-    fun <T : Any> lookup(type: KClass<T>, qualifier: Qualifier, vararg parameters: Any): T {
+    override fun <T : Any> lookup(type: KClass<T>, qualifier: Qualifier, vararg parameters: Any): T {
         eventListener.onLookup(
             type = type,
             qualifier = qualifier,
