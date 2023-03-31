@@ -19,8 +19,8 @@ interface DIContainer {
 }
 
 internal class DIContainerImpl internal constructor(
-    private val application: KoinApplication = koinApplication { allowOverride(false) },
-    private val eventListener: DIContainerEventListener
+    private val application: KoinApplication = koinApplication {},
+    private val eventListener: DIContainerEventListener,
 ) : DIContainer {
 
     internal var registeredModules: HashMap<String, DIModule> = HashMap()
@@ -41,7 +41,11 @@ internal class DIContainerImpl internal constructor(
         eventListener.onModuleDeregistered(module)
     }
 
-    override fun <T : Any> lookup(type: KClass<T>, qualifier: Qualifier, vararg parameters: Any): T {
+    override fun <T : Any> lookup(
+        type: KClass<T>,
+        qualifier: Qualifier,
+        vararg parameters: Any,
+    ): T {
         eventListener.onLookup(
             type = type,
             qualifier = qualifier,
