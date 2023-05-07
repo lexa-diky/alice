@@ -7,15 +7,19 @@ import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.test.verify.MissingKoinDefinitionException
 import org.koin.test.verify.verify
 
-@OptIn(AliceInternalApi::class, KoinExperimentalAPI::class)
 fun DIModule.isFullyDefined(extraTypes: List<KClass<*>> = emptyList(), rethrow: Boolean = false): Boolean = try {
-    koinModule.verify(
-        extraTypes = extraTypes
-    )
+    shouldBeFullyDefined(extraTypes)
     true
 } catch (e: MissingKoinDefinitionException) {
     if (rethrow) {
         throw e
     }
     false
+}
+
+@OptIn(AliceInternalApi::class, KoinExperimentalAPI::class)
+fun DIModule.shouldBeFullyDefined(extraTypes: List<KClass<*>> = emptyList()) {
+    koinModule.verify(
+        extraTypes = extraTypes
+    )
 }
