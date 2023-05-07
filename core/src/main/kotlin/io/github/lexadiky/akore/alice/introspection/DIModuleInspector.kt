@@ -1,5 +1,8 @@
+@file:OptIn(AliceInternalApi::class)
+
 package io.github.lexadiky.akore.alice.introspection
 
+import io.github.lexadiky.akore.alice.AliceInternalApi
 import io.github.lexadiky.akore.alice.DIModule
 import io.github.lexadiky.akore.alice.introspection.entity.DIModuleInspection
 import io.github.lexadiky.akore.alice.introspection.entity.LazyDIModuleInspection

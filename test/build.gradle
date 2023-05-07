@@ -7,16 +7,16 @@ group = 'com.github.akore-org'
 version = '1.0'
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+    implementation project(":core")
     implementation "io.insert-koin:koin-core:3.3.2"
+    implementation "io.insert-koin:koin-test:3.3.2"
 }
 
 publishing {
     publications {
         maven(MavenPublication) {
             groupId "com.github.akore-org.alice"
-            artifactId "core"
+            artifactId "test"
             version "1.0"
             from components.java
         }

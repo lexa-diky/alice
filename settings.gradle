@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "alice-di"
-include ':core', ":robo"
+include ':core', ":robo", ":test"

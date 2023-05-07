@@ -1,5 +1,8 @@
+@file:OptIn(AliceInternalApi::class)
+
 package io.github.lexadiky.akore.alice.introspection.entity
 
+import io.github.lexadiky.akore.alice.AliceInternalApi
 import io.github.lexadiky.akore.alice.DIModule
 import io.github.lexadiky.akore.alice.introspection.DIModuleInspector
 import org.koin.core.annotation.KoinInternalApi

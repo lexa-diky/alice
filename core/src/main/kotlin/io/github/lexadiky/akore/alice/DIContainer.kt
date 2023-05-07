@@ -1,3 +1,5 @@
+@file:OptIn(AliceInternalApi::class)
+
 package io.github.lexadiky.akore.alice
 
 import io.github.lexadiky.akore.alice.introspection.DIContainerEventListener

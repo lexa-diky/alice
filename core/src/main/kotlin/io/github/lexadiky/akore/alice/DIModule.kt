@@ -13,13 +13,13 @@ import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
-class DIModule(
+class DIModule internal constructor(
     val name: String,
-    internal val koinModule: Module,
+    @property:AliceInternalApi val koinModule: Module,
     internal val importedModules: List<DIModule>
 )
 
-@OptIn(KoinInternalApi::class)
+@OptIn(KoinInternalApi::class, AliceInternalApi::class)
 class ModuleBuilder(private val module: Module) {
     @PublishedApi
     internal var inInternalScope: Boolean = false
