@@ -19,14 +19,3 @@ kotlin {
         }
     }
 }
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId "com.github.akore-org.alice"
-            artifactId "core"
-            version "1.0"
-            from components.kotlin
-        }
-    }
-}

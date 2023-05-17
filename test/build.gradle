@@ -11,14 +11,3 @@ dependencies {
     implementation "io.insert-koin:koin-core:3.3.2"
     implementation "io.insert-koin:koin-test:3.3.2"
 }
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId "com.github.akore-org.alice"
-            artifactId "test"
-            version "1.0"
-            from components.java
-        }
-    }
-}
