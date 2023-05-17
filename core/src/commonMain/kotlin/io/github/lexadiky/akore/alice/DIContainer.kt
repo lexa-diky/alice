@@ -25,7 +25,7 @@ internal class DIContainerImpl internal constructor(
     private val eventListener: DIContainerEventListener,
 ) : DIContainer {
 
-    internal var registeredModules: HashMap<String, DIModule> = HashMap()
+    internal var registeredModules: MutableMap<String, DIModule> = mutableMapOf()
 
     override fun register(module: DIModule) {
         if (module.name in registeredModules) {

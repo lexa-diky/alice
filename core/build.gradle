@@ -1,15 +1,23 @@
 plugins {
-    id 'kotlin'
+    id 'org.jetbrains.kotlin.multiplatform'
     id 'maven-publish'
 }
 
 group = 'com.github.akore-org'
 version = '1.0'
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
-    implementation "io.insert-koin:koin-core:3.3.2"
+kotlin {
+    jvm {
+
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'io.insert-koin:koin-core:3.3.2'
+            }
+        }
+    }
 }
 
 publishing {
@@ -18,7 +26,7 @@ publishing {
             groupId "com.github.akore-org.alice"
             artifactId "core"
             version "1.0"
-            from components.java
+            from components.kotlin
         }
     }
 }
